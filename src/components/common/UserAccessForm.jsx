@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function UserAccessForm({ title, buttonId, buttonName }) {
+  const navigate = useNavigate();
   const [emailMessage, setEmailMessage] = useState('이메일에는 @가 포함되어야 합니다.');
   const [passwordMessage, setPasswordMessage] = useState('비밀번호는 8자 이상이어야 합니다.');
   const [isEmail, setIsEmail] = useState(false);
@@ -18,6 +20,8 @@ function UserAccessForm({ title, buttonId, buttonName }) {
       setIsPassword(true);
     }
   };
+  const moveToSignInPage = () => navigate('/signin');
+  const moveToTodoPage = () => {};
 
   return (
     <div className="flex flex-col w-[100%] p-[5%] items-center">
@@ -47,6 +51,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
               : 'w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg bg-lightGray'
           }
           disabled={!(isEmail && isPassword)}
+          onClick={buttonName === '회원가입' ? moveToSignInPage : moveToTodoPage}
         >
           {buttonName}
         </button>
