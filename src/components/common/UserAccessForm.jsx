@@ -3,15 +3,19 @@ import { useState } from 'react';
 function UserAccessForm({ title, buttonId, buttonName }) {
   const [emailMessage, setEmailMessage] = useState('이메일에는 @가 포함되어야 합니다.');
   const [passwordMessage, setPasswordMessage] = useState('비밀번호는 8자 이상이어야 합니다.');
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
 
   const onChangeEmailHandler = (e) => {
     if (e.target.value.includes('@')) {
       setEmailMessage('사용가능한 이메일입니다.');
+      setIsEmail(true);
     }
   };
   const onChangePasswordHandler = (e) => {
     if (e.target.value.length >= 8) {
       setPasswordMessage('사용가능한 비밀번호입니다.');
+      setIsPassword(true);
     }
   };
 
@@ -37,7 +41,12 @@ function UserAccessForm({ title, buttonId, buttonName }) {
         </div>
         <button
           data-testid={buttonId}
-          className="w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg bg-lightGray"
+          className={
+            isEmail && isPassword
+              ? 'w-[100%] p-[1.5%] border-2 border-[black] rounded-lg bg-[black] text-[white]'
+              : 'w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg bg-lightGray'
+          }
+          disabled={!(isEmail && isPassword)}
         >
           {buttonName}
         </button>
