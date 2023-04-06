@@ -54,10 +54,16 @@ function UserAccessForm({ title, buttonId, buttonName }) {
         email,
         password,
       }),
-    }).then((response) => {
-      if (response.ok) navigate('/todo');
-      return response.json();
-    });
+    })
+      .then((response) => {
+        if (response.ok) navigate('/todo');
+        return response.json();
+      })
+      .then((response) => {
+        if (response['access_token']) {
+          localStorage.setItem('access_token', response['access_token']);
+        } else window.alert(response.message);
+      });
   };
 
   return (
