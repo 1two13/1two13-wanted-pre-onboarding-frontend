@@ -42,7 +42,23 @@ function UserAccessForm({ title, buttonId, buttonName }) {
       })
       .then((result) => window.alert(result.message));
   };
-  const moveToTodoPage = () => {};
+
+  const moveToTodoPage = () => {
+    const URL = 'http://localhost:8000/auth/signin';
+    fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    }).then((response) => {
+      if (response.ok) navigate('/todo');
+      return response.json();
+    });
+  };
 
   return (
     <div className="flex flex-col w-[100%] p-[5%] items-center">
