@@ -7,20 +7,41 @@ function UserAccessForm({ title, buttonId, buttonName }) {
   const [passwordMessage, setPasswordMessage] = useState('비밀번호는 8자 이상이어야 합니다.');
   const [isEmail, setIsEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onChangeEmailHandler = (e) => {
     if (e.target.value.includes('@')) {
+      setEmail(e.target.value);
       setEmailMessage('사용가능한 이메일입니다.');
       setIsEmail(true);
     }
   };
   const onChangePasswordHandler = (e) => {
     if (e.target.value.length >= 8) {
+      setPassword(e.target.value);
       setPasswordMessage('사용가능한 비밀번호입니다.');
       setIsPassword(true);
     }
   };
-  const moveToSignInPage = () => navigate('/signin');
+  const moveToSignInPage = () => {
+    const URL = 'http://localhost:8000/auth/signup';
+    fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) navigate('/signin');
+        return response.json();
+      })
+      .then((result) => window.alert(result.message));
+  };
   const moveToTodoPage = () => {};
 
   return (
@@ -44,6 +65,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
           <div>{passwordMessage}</div>
         </div>
         <button
+          type="button"
           data-testid={buttonId}
           className={
             isEmail && isPassword
