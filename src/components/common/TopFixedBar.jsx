@@ -4,6 +4,10 @@ function TopFixedBar() {
   const navigate = useNavigate();
 
   const moveToHomePage = () => navigate('/');
+  const moveToTodoPage = () => {
+    if (localStorage.getItem('access_token')) navigate('/todo');
+    else navigate('/signin');
+  };
   const moveToSignUpPage = () => {
     if (localStorage.getItem('access_token')) navigate('/todo');
     else navigate('/signup');
@@ -15,7 +19,12 @@ function TopFixedBar() {
 
   return (
     <div className="flex px-[4%] py-[1.5%] border-b-2 border-lightGray justify-between">
-      <button onClick={moveToHomePage}>홈</button>
+      <div>
+        <button onClick={moveToHomePage} className="mr-[15px]">
+          홈
+        </button>
+        <button onClick={moveToTodoPage}>Todo</button>
+      </div>
       <div>
         <button onClick={moveToSignUpPage} className="mr-[15px]">
           회원가입
