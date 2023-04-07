@@ -4,8 +4,14 @@ function TopFixedBar() {
   const navigate = useNavigate();
 
   const moveToHomePage = () => navigate('/');
-  const moveToSignUpPage = () => navigate('/signup');
-  const moveToSignInPage = () => navigate('/signin');
+  const moveToSignUpPage = () => {
+    if (localStorage.getItem('access_token')) navigate('/todo');
+    else navigate('/signup');
+  };
+  const moveToSignInPage = () => {
+    if (localStorage.getItem('access_token')) navigate('/todo');
+    else navigate('/signin');
+  };
 
   return (
     <div className="flex px-[4%] py-[1.5%] border-b-2 border-lightGray justify-between">
