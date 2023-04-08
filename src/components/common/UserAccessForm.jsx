@@ -17,6 +17,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
       setIsEmail(true);
     }
   };
+
   const onChangePasswordHandler = (e) => {
     if (e.target.value.length >= 8) {
       setPassword(e.target.value);
@@ -24,7 +25,10 @@ function UserAccessForm({ title, buttonId, buttonName }) {
       setIsPassword(true);
     }
   };
-  const moveToSignInPage = () => {
+
+  const moveToSignInPage = (e) => {
+    e.preventDefault();
+
     const URL = 'https://www.pre-onboarding-selection-task.shop/auth/signup';
     fetch(URL, {
       method: 'POST',
@@ -43,7 +47,9 @@ function UserAccessForm({ title, buttonId, buttonName }) {
       .then((result) => window.alert(result.message));
   };
 
-  const moveToTodoPage = () => {
+  const moveToTodoPage = (e) => {
+    e.preventDefault();
+
     const URL = 'https://www.pre-onboarding-selection-task.shop/auth/signin';
     fetch(URL, {
       method: 'POST',
@@ -69,7 +75,10 @@ function UserAccessForm({ title, buttonId, buttonName }) {
   return (
     <div className="flex flex-col w-[100%] p-[5%] items-center">
       <h1 className="mb-[3%] font-bold text-5xl">{title}</h1>
-      <form className="flex flex-col justify-between w-[40%] h-[28vh]">
+      <form
+        onSubmit={buttonName === '회원가입' ? moveToSignInPage : moveToTodoPage}
+        className="flex flex-col justify-between w-[40%] h-[28vh]"
+      >
         <div>
           <input
             data-testid="email-input"
@@ -87,7 +96,6 @@ function UserAccessForm({ title, buttonId, buttonName }) {
           <div>{passwordMessage}</div>
         </div>
         <button
-          type="button"
           data-testid={buttonId}
           className={
             isEmail && isPassword
@@ -95,7 +103,6 @@ function UserAccessForm({ title, buttonId, buttonName }) {
               : 'w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg bg-lightGray'
           }
           disabled={!(isEmail && isPassword)}
-          onClick={buttonName === '회원가입' ? moveToSignInPage : moveToTodoPage}
         >
           {buttonName}
         </button>
