@@ -7,7 +7,7 @@ function TodoPage() {
 
   const onChangeInputHandler = (e) => setTodo(e.target.value);
   const addTodoList = () => {
-    const URL = 'http://localhost:8000/todos';
+    const URL = 'https://www.pre-onboarding-selection-task.shop/todos';
     const access_token = localStorage.getItem('access_token');
     let todoList = todo_list ? [...JSON.parse(todo_list)] : [];
 

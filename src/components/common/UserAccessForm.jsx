@@ -25,7 +25,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
     }
   };
   const moveToSignInPage = () => {
-    const URL = 'http://localhost:8000/auth/signup';
+    const URL = 'https://www.pre-onboarding-selection-task.shop/auth/signup';
     fetch(URL, {
       method: 'POST',
       headers: {
@@ -44,7 +44,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
   };
 
   const moveToTodoPage = () => {
-    const URL = 'http://localhost:8000/auth/signin';
+    const URL = 'https://www.pre-onboarding-selection-task.shop/auth/signin';
     fetch(URL, {
       method: 'POST',
       headers: {
