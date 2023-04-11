@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TodoForm from '../components/common/TodoForm';
 
 function TodoPage() {
-  const todo_list = localStorage.getItem('todo_list');
+  const URL = 'https://www.pre-onboarding-selection-task.shop/todos';
+  const access_token = localStorage.getItem('access_token');
   const [todo, setTodo] = useState('');
+  const [todoList, setTodoList] = useState([]);
 
   const onChangeInputHandler = (e) => setTodo(e.target.value);
-  const addTodoList = () => {
-    const URL = 'https://www.pre-onboarding-selection-task.shop/todos';
-    const access_token = localStorage.getItem('access_token');
-    let todoList = todo_list ? [...JSON.parse(todo_list)] : [];
 
+  const createTodo = () => {
     fetch(URL, {
       method: 'POST',
       headers: {
@@ -25,14 +24,27 @@ function TodoPage() {
         return response.json();
       })
       .then((response) => {
-        if (response.statusCode === 400) window.alert(response.message);
-        else {
+        if (!(response.statusCode >= 400)) {
           todoList.push(response);
           setTodo('');
-          localStorage.setItem('todo_list', JSON.stringify(todoList));
         }
       });
   };
+
+  useEffect(() => {
+    fetch(URL, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (!(response.statusCode >= 400)) setTodoList(response);
+      });
+  }, []);
 
   return (
     <div className="py-[3%] px-[5%]">
@@ -42,20 +54,19 @@ function TodoPage() {
           data-testid="new-todo-input"
           onChange={onChangeInputHandler}
           value={todo}
+          placeholder={'할 일을 등록해 주세요.'}
           className="px-[5px] mr-[10px] border-[1px]"
         />
         <button
           data-testid="new-todo-add-button"
-          onClick={addTodoList}
+          onClick={createTodo}
           className="px-[2px] border-[1px] bg-lightGray"
         >
           추가
         </button>
       </div>
       <div>
-        {todo_list
-          ? JSON.parse(todo_list).map((el, i) => <TodoForm title={el.todo} key={i} />)
-          : ''}
+        {todoList.length > 0 ? todoList.map((el, i) => <TodoForm title={el.todo} key={i} />) : ''}
       </div>
     </div>
   );
