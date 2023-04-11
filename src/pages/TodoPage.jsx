@@ -6,6 +6,7 @@ function TodoPage() {
   const access_token = localStorage.getItem('access_token');
   const [todo, setTodo] = useState('');
   const [todoList, setTodoList] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
   const onChangeInputHandler = (e) => setTodo(e.target.value);
 
@@ -19,19 +20,14 @@ function TodoPage() {
       body: JSON.stringify({
         todo,
       }),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        if (!(response.statusCode >= 400)) {
-          todoList.push(response);
-          setTodo('');
-        }
-      });
+    }).then((response) => {
+      setTodo('');
+      getTodos();
+      return response.json();
+    });
   };
 
-  useEffect(() => {
+  const getTodos = () => {
     fetch(URL, {
       method: 'GET',
       headers: {
@@ -44,7 +40,29 @@ function TodoPage() {
       .then((response) => {
         if (!(response.statusCode >= 400)) setTodoList(response);
       });
+  };
+
+  useEffect(() => {
+    getTodos();
   }, []);
+
+  const updateTodo = (el) => {
+    fetch(`${URL}/${el.id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        todo: el.todo,
+        isCompleted: el.isCompleted ? false : true,
+      }),
+    }).then((response) => {
+      setIsChecked(el.isCompleted);
+      getTodos();
+      return response.json();
+    });
+  };
 
   return (
     <div className="py-[3%] px-[5%]">
@@ -66,7 +84,11 @@ function TodoPage() {
         </button>
       </div>
       <div>
-        {todoList.length > 0 ? todoList.map((el, i) => <TodoForm title={el.todo} key={i} />) : ''}
+        {todoList.length > 0
+          ? todoList.map((el, i) => (
+              <TodoForm el={el} onChange={() => updateTodo(el)} checked={el.isCompleted} key={i} />
+            ))
+          : ''}
       </div>
     </div>
   );
