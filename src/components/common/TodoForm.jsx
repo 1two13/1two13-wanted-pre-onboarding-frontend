@@ -1,4 +1,4 @@
-function TodoForm({ el, onChange, checked }) {
+function TodoForm({ el, onChange, checked, deleteTodo }) {
   return (
     <li>
       <label className="mr-[10px]">
@@ -8,7 +8,11 @@ function TodoForm({ el, onChange, checked }) {
       <button data-testid="modify-button" className="m-[1px] border-[1px] bg-lightGray">
         수정
       </button>
-      <button data-testid="delete-button" className="m-[1px] border-[1px] bg-lightGray">
+      <button
+        data-testid="delete-button"
+        onClick={deleteTodo}
+        className="m-[1px] border-[1px] bg-lightGray"
+      >
         삭제
       </button>
     </li>

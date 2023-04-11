@@ -64,6 +64,18 @@ function TodoPage() {
     });
   };
 
+  const deleteTodo = (el) => {
+    fetch(`${URL}/${el.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }).then((response) => {
+      getTodos();
+      return response.json();
+    });
+  };
+
   return (
     <div className="py-[3%] px-[5%]">
       <h1 className="mb-[3%] font-bold text-5xl">Todo</h1>
@@ -86,7 +98,13 @@ function TodoPage() {
       <div>
         {todoList.length > 0
           ? todoList.map((el, i) => (
-              <TodoForm el={el} onChange={() => updateTodo(el)} checked={el.isCompleted} key={i} />
+              <TodoForm
+                key={i}
+                el={el}
+                onChange={() => updateTodo(el)}
+                checked={el.isCompleted}
+                deleteTodo={() => deleteTodo(el)}
+              />
             ))
           : ''}
       </div>
