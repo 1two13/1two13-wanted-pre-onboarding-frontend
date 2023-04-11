@@ -9,7 +9,7 @@ function TodoPage() {
 
   const onChangeInputHandler = (e) => setTodo(e.target.value);
 
-  const addTodoList = () => {
+  const createTodo = () => {
     fetch(URL, {
       method: 'POST',
       headers: {
@@ -59,7 +59,7 @@ function TodoPage() {
         />
         <button
           data-testid="new-todo-add-button"
-          onClick={addTodoList}
+          onClick={createTodo}
           className="px-[2px] border-[1px] bg-lightGray"
         >
           추가
