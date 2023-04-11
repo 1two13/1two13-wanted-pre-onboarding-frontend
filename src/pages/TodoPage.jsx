@@ -72,7 +72,6 @@ function TodoPage() {
       },
     }).then((response) => {
       getTodos();
-      return response.json();
     });
   };
 
