@@ -4,7 +4,6 @@ function TopFixedBar() {
   const access_token = localStorage.getItem('access_token');
   const navigate = useNavigate();
 
-  const moveToHomePage = () => navigate('/');
   const moveToTodoPage = () => {
     if (access_token) navigate('/todo');
     else navigate('/signin');
@@ -21,9 +20,6 @@ function TopFixedBar() {
   return (
     <div className="flex px-[4%] py-[1.5%] border-b-2 border-lightGray justify-between">
       <div>
-        <button onClick={moveToHomePage} className="mr-[15px]">
-          홈
-        </button>
         <button onClick={moveToTodoPage}>Todo</button>
       </div>
       <div>
