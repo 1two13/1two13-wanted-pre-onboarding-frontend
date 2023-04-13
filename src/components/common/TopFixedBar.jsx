@@ -1,19 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 
 function TopFixedBar() {
+  const access_token = localStorage.getItem('access_token');
   const navigate = useNavigate();
 
   const moveToHomePage = () => navigate('/');
   const moveToTodoPage = () => {
-    if (localStorage.getItem('access_token')) navigate('/todo');
+    if (access_token) navigate('/todo');
     else navigate('/signin');
   };
   const moveToSignUpPage = () => {
-    if (localStorage.getItem('access_token')) navigate('/todo');
+    if (access_token) navigate('/todo');
     else navigate('/signup');
   };
   const moveToSignInPage = () => {
-    if (localStorage.getItem('access_token')) navigate('/todo');
+    if (access_token) navigate('/todo');
     else navigate('/signin');
   };
 
