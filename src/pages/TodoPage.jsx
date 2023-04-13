@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+
 import TodoForm from '../components/common/TodoForm';
 
 function TodoPage() {
@@ -78,6 +80,10 @@ function TodoPage() {
   useEffect(() => {
     getTodos();
   }, []);
+
+  if (!access_token) {
+    return <Navigate to="/signin" />;
+  }
 
   return (
     <div className="py-[3%] px-[5%]">

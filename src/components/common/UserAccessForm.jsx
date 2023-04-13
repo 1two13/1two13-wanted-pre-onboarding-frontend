@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 function UserAccessForm({ title, buttonId, buttonName }) {
+  const access_token = localStorage.getItem('access_token');
   const navigate = useNavigate();
   const [emailMessage, setEmailMessage] = useState('이메일에는 @가 포함되어야 합니다.');
   const [passwordMessage, setPasswordMessage] = useState('비밀번호는 8자 이상이어야 합니다.');
@@ -71,6 +72,10 @@ function UserAccessForm({ title, buttonId, buttonName }) {
         } else window.alert(response.message);
       });
   };
+
+  if (access_token) {
+    return <Navigate to="/todo" />;
+  }
 
   return (
     <div className="flex flex-col w-[100%] p-[5%] items-center">
