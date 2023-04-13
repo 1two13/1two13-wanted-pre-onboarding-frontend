@@ -94,6 +94,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
           <div className="mb-[2%]">{emailMessage}</div>
           <input
             data-testid="password-input"
+            type="password"
             placeholder="비밀번호"
             className="w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg"
             onChange={onChangePasswordHandler}
