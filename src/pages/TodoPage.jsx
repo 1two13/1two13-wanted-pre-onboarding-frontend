@@ -6,9 +6,6 @@ function TodoPage() {
   const access_token = localStorage.getItem('access_token');
   const [todo, setTodo] = useState('');
   const [todoList, setTodoList] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
-
-  const onChangeInputHandler = (e) => setTodo(e.target.value);
 
   const createTodo = () => {
     fetch(URL, {
@@ -20,11 +17,14 @@ function TodoPage() {
       body: JSON.stringify({
         todo,
       }),
-    }).then((response) => {
-      setTodo('');
-      getTodos();
-      return response.json();
-    });
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        setTodo('');
+        setTodoList([...todoList, response]);
+      });
   };
 
   const getTodos = () => {
@@ -42,39 +42,42 @@ function TodoPage() {
       });
   };
 
-  useEffect(() => {
-    getTodos();
-  }, []);
+  const deleteTodo = (id) => {
+    setTodoList(todoList.filter((todo) => todo.id !== id));
+    fetch(`${URL}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+  };
 
-  const updateTodo = (el) => {
-    fetch(`${URL}/${el.id}`, {
+  const updateTodo = (id, todo, isCompleted) => {
+    setTodoList(
+      todoList.map((el) => {
+        if (el.id !== id) return el;
+        return { ...el, todo, isCompleted };
+      })
+    );
+
+    fetch(`${URL}/${id}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${access_token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        todo: el.todo,
-        isCompleted: el.isCompleted ? false : true,
+        todo,
+        isCompleted,
       }),
     }).then((response) => {
-      setIsChecked(el.isCompleted);
-      getTodos();
       return response.json();
     });
   };
 
-  const deleteTodo = (el) => {
-    fetch(`${URL}/${el.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    }).then((response) => {
-      getTodos();
-      return response.json();
-    });
-  };
+  useEffect(() => {
+    getTodos();
+  }, []);
 
   return (
     <div className="py-[3%] px-[5%]">
@@ -82,8 +85,8 @@ function TodoPage() {
       <div className="mb-[1%]">
         <input
           data-testid="new-todo-input"
-          onChange={onChangeInputHandler}
           value={todo}
+          onChange={(e) => setTodo(e.target.value)}
           placeholder={'할 일을 등록해 주세요.'}
           className="px-[5px] mr-[10px] border-[1px]"
         />
@@ -97,14 +100,8 @@ function TodoPage() {
       </div>
       <div>
         {todoList.length > 0
-          ? todoList.map((el, i) => (
-              <TodoForm
-                key={i}
-                el={el}
-                onChange={() => updateTodo(el)}
-                checked={el.isCompleted}
-                deleteTodo={() => deleteTodo(el)}
-              />
+          ? todoList.map((el) => (
+              <TodoForm key={el.id} el={el} updateTodo={updateTodo} deleteTodo={deleteTodo} />
             ))
           : ''}
       </div>
