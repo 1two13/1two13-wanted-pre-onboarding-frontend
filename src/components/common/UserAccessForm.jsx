@@ -17,8 +17,6 @@ function UserAccessForm({ title, buttonId, buttonName }) {
   const navigate = useNavigate();
   const [emailMessage, setEmailMessage] = useState(EMAIL_REQUIREMENT);
   const [passwordMessage, setPasswordMessage] = useState(PASSWORD_REQUIREMENT);
-  const [isEmail, setIsEmail] = useState(false);
-  const [isPassword, setIsPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,19 +25,13 @@ function UserAccessForm({ title, buttonId, buttonName }) {
   }
 
   const onChangeEmailHandler = (e) => {
-    if (e.target.value.includes('@')) {
-      setEmail(e.target.value);
-      setIsEmail(true);
-      setEmailMessage(AVAILABLE_EMAIL);
-    } else setIsEmail(false);
+    setEmail(e.target.value);
+    setEmailMessage(AVAILABLE_EMAIL);
   };
 
   const onChangePasswordHandler = (e) => {
-    if (e.target.value.length >= 8) {
-      setPassword(e.target.value);
-      setIsPassword(true);
-      setPasswordMessage(AVAILABLE_PASSWORD);
-    } else setIsPassword(false);
+    setPassword(e.target.value);
+    setPasswordMessage(AVAILABLE_PASSWORD);
   };
 
   const moveToSignInPage = (e) => {
@@ -69,6 +61,8 @@ function UserAccessForm({ title, buttonId, buttonName }) {
       });
   };
 
+  const isValidate = email.includes('@') && password.length >= 8;
+
   return (
     <div className="flex flex-col w-[100%] p-[5%] items-center">
       <h1 className="mb-[3%] font-bold text-5xl">{title}</h1>
@@ -79,6 +73,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
         <div>
           <input
             data-testid="email-input"
+            value={email}
             placeholder={EMAIL}
             className="w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg"
             onChange={onChangeEmailHandler}
@@ -87,6 +82,7 @@ function UserAccessForm({ title, buttonId, buttonName }) {
           <input
             data-testid="password-input"
             type="password"
+            value={password}
             placeholder={PASSWORD}
             className="w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg"
             onChange={onChangePasswordHandler}
@@ -96,11 +92,11 @@ function UserAccessForm({ title, buttonId, buttonName }) {
         <button
           data-testid={buttonId}
           className={
-            isEmail && isPassword
+            isValidate
               ? 'w-[100%] p-[1.5%] border-2 border-[black] rounded-lg bg-[black] text-[white]'
               : 'w-[100%] p-[1.5%] border-2 border-lightGray rounded-lg bg-lightGray'
           }
-          disabled={!(isEmail && isPassword)}
+          disabled={!isValidate}
         >
           {buttonName}
         </button>
