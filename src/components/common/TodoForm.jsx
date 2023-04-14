@@ -1,35 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SUBMIT, CANCEL, MODIFY, DELETE } from '../../static/constants';
 
 function TodoForm({ el, updateTodo, deleteTodo }) {
   const [isModify, setIsModify] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(el.isCompleted);
   const [todo, setTodo] = useState(el.todo);
-
-  const checkboxHandler = () => {
-    setIsCompleted(!isCompleted);
-    updateTodo(el.id, el.todo, isCompleted);
-  };
-
-  const cancelModify = () => {
-    setIsModify(false);
-    updateTodo(el.id, el.todo, el.isCompleted);
-  };
 
   const submitHandler = () => {
     setIsModify(false);
     updateTodo(el.id, todo, el.isCompleted);
   };
 
-  useEffect(() => {
-    checkboxHandler();
-  }, []);
-
   return (
     <li>
       <input
         type="checkbox"
-        onChange={checkboxHandler}
+        onChange={() => updateTodo(el.id, el.todo, !el.isCompleted)}
         checked={el.isCompleted}
         className="mr-[10px]"
       />
@@ -50,7 +35,7 @@ function TodoForm({ el, updateTodo, deleteTodo }) {
           </button>
           <button
             data-testid="cancel-button"
-            onClick={cancelModify}
+            onClick={() => setIsModify(false)}
             className="m-[1px] px-[5px] border-[1px] bg-lightGray"
           >
             {CANCEL}
