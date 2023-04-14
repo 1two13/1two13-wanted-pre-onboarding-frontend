@@ -1,25 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
+import createTodoApi from '../api/createTodoApi';
+import getTodosApi from '../api/getTodosApi';
+import deleteTodoApi from '../api/deleteTodoApi';
+import updateTodoApi from '../api/updateTodoApi';
 import TodoForm from '../components/common/TodoForm';
+import { CREATE_TODO, ADD } from '../static/constants';
 
 function TodoPage() {
-  const URL = 'https://www.pre-onboarding-selection-task.shop/todos';
   const access_token = localStorage.getItem('access_token');
   const [todo, setTodo] = useState('');
   const [todoList, setTodoList] = useState([]);
 
   const createTodo = () => {
-    fetch(URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        todo,
-      }),
-    })
+    createTodoApi(todo)
       .then((response) => {
         return response.json();
       })
@@ -30,12 +25,7 @@ function TodoPage() {
   };
 
   const getTodos = () => {
-    fetch(URL, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    })
+    getTodosApi()
       .then((response) => {
         return response.json();
       })
@@ -46,12 +36,7 @@ function TodoPage() {
 
   const deleteTodo = (id) => {
     setTodoList(todoList.filter((todo) => todo.id !== id));
-    fetch(`${URL}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+    deleteTodoApi(id);
   };
 
   const updateTodo = (id, todo, isCompleted) => {
@@ -62,17 +47,7 @@ function TodoPage() {
       })
     );
 
-    fetch(`${URL}/${id}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        todo,
-        isCompleted,
-      }),
-    }).then((response) => {
+    updateTodoApi(id, todo, isCompleted).then((response) => {
       return response.json();
     });
   };
@@ -93,7 +68,7 @@ function TodoPage() {
           data-testid="new-todo-input"
           value={todo}
           onChange={(e) => setTodo(e.target.value)}
-          placeholder={'할 일을 등록해 주세요.'}
+          placeholder={CREATE_TODO}
           className="px-[5px] mr-[10px] border-[1px]"
         />
         <button
@@ -101,7 +76,7 @@ function TodoPage() {
           onClick={createTodo}
           className="px-[2px] border-[1px] bg-lightGray"
         >
-          추가
+          {ADD}
         </button>
       </div>
       <div>
