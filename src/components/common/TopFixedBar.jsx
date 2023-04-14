@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { SIGN_UP, SIGN_IN } from '../../static/constants';
 
 function TopFixedBar() {
   const access_token = localStorage.getItem('access_token');
@@ -24,9 +25,9 @@ function TopFixedBar() {
       </div>
       <div>
         <button onClick={moveToSignUpPage} className="mr-[15px]">
-          회원가입
+          {SIGN_UP}
         </button>
-        <button onClick={moveToSignInPage}>로그인</button>
+        <button onClick={moveToSignInPage}>{SIGN_IN}</button>
       </div>
     </div>
   );

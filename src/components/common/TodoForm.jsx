@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SUBMIT, CANCEL, MODIFY, DELETE } from '../../static/constants';
 
 function TodoForm({ el, updateTodo, deleteTodo }) {
   const [isModify, setIsModify] = useState(false);
@@ -45,14 +46,14 @@ function TodoForm({ el, updateTodo, deleteTodo }) {
             onClick={submitHandler}
             className="m-[1px] px-[5px] border-[1px] bg-lightGray"
           >
-            제출
+            {SUBMIT}
           </button>
           <button
             data-testid="cancel-button"
             onClick={cancelModify}
             className="m-[1px] px-[5px] border-[1px] bg-lightGray"
           >
-            취소
+            {CANCEL}
           </button>
         </>
       ) : (
@@ -65,14 +66,14 @@ function TodoForm({ el, updateTodo, deleteTodo }) {
             onClick={() => setIsModify(!isModify)}
             className="m-[1px] border-[1px] bg-lightGray"
           >
-            수정
+            {MODIFY}
           </button>
           <button
             data-testid="delete-button"
             onClick={() => deleteTodo(el.id)}
             className="m-[1px] border-[1px] bg-lightGray"
           >
-            삭제
+            {DELETE}
           </button>
         </>
       )}

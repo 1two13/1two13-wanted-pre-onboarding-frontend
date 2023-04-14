@@ -1,7 +1,8 @@
 import UserAccessForm from '../components/common/UserAccessForm';
+import { SIGN_UP } from '../static/constants';
 
 function SignUpPage() {
-  return <UserAccessForm title={'회원가입'} buttonId={'signup-button'} buttonName={'회원가입'} />;
+  return <UserAccessForm title={SIGN_UP} buttonId={'signup-button'} buttonName={SIGN_UP} />;
 }
 
 export default SignUpPage;
