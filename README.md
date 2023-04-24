@@ -17,5 +17,5 @@ npm start
 
 <br />
 
-## 배포 링크
+## 배포 링크(현재 배포한 서버는 비용 문제로 인해 종료하였습니다.)
 * https://main.d2oirniwa44ewl.amplifyapp.com/
